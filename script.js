@@ -4,25 +4,47 @@
 const ROCK = "Rock";
 const PAPER = "Paper";
 const SCISSORS = "Scissors";
+const ROUNDS = 5;
 let compScore = 0;
 let playerScore = 0;
+
 // play game
     // play round of game
+    for (let i = 0; i < ROUNDS; i++ ) {
         // get comp choice
         let computerSelection = getComputerChoice();
+        
         // get player choice
         let playerSelection = getPlayerChoice();
-        // display choices to console
-        console.log("Computer selection: " + computerSelection);
-        console.log("Player selection: " + playerSelection);
         
-        // determine results of round, if any
-        // display winner of rounds, if any
-        // increment variable of winner by 1
-    // repeat above steps 5 times
-// if player score variable is > comp score variable, display player wins message
-// else if player score variable is < comp score variable, display player loses message
-// else display draw message
+        // display round to console
+        console.log(`Round ${i + 1} Go!: `);
+        console.log(`  Computer chooses ${computerSelection}`);
+        console.log(`  Player chooses ${playerSelection}`);
+        
+        // display round results and increment scores accordingly
+        let playerWin = calcRoundResults(computerSelection, playerSelection);
+        if (playerWin) {
+            playerScore += 1;
+            console.log("  You win!")
+        } else if (playerWin == false) {
+            compScore += 1;
+            console.log("  You lose!")
+        } else {
+            console.log("  Draw!");
+        }
+    }
+
+    // display game results
+    console.log(`Score: ${playerScore} to ${compScore}`)
+
+    if (playerScore > compScore) {
+        console.log("Winner!!!");
+    } else if (playerScore < computerScore) {
+        console.log("Loser!!!");
+    } else {
+        console.log("What are the odds?!?!? Draw!!!");
+    }
 
 /**
  * Function that randomly generates computer player choice
@@ -62,13 +84,17 @@ function getPlayerChoice () {
  * Function to determine results of round
  */
 function calcRoundResults (computerSelection, playerSelection) {
-        // if playerChoice = compChoice, round is a draw
-        // else if playerChoice = rock and compChoice = scissors, player wins
-        // else if playerChoice = paper and compChoice = rock, player wins
-        // else if playerChoice = scissors and compChoice = paper, player wins
-        // else player loses
-
-        /******* How to return change player score???? ****/
+        if (playerSelection === computerSelection) {
+            return;
+        } else if (playerSelection === ROCK && computerSelection === SCISSORS) {
+            return true;
+        } else if (playerSelection === PAPER && computerSelection === ROCK) {
+            return true;
+        } else if (playerSelection === SCISSORS && computerSelection === PAPER) {
+            return true;
+        } else {
+            return false;
+        }
 }
 
 /**

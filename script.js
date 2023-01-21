@@ -1,34 +1,37 @@
 /* Program to play the age old classic, Rock, Paper, Scissors against computer */
 
+game();
 
-const ROCK = "Rock";
-const PAPER = "Paper";
-const SCISSORS = "Scissors";
-const ROUNDS = 5;
-let compScore = 0;
-let playerScore = 0;
+/**
+ * Function to play game of Rock, Paper, Scissors
+ */
+function game () {
+    const SELECTIONS = ["Rock", "Paper", "Scissors"];
+    const ROUNDS = 5;
+    let computerScore = 0;
+    let playerScore = 0;
+    let computerSelection;
+    let playerSelection;
+    let playerWin;
 
-// play game
     // play round of game
     for (let i = 0; i < ROUNDS; i++ ) {
-        // get comp choice
-        let computerSelection = getComputerChoice();
-        
-        // get player choice
-        let playerSelection = getPlayerChoice();
-        
-        // display round to console
         console.log(`Round ${i + 1} Go!: `);
-        console.log(`  Computer chooses ${computerSelection}`);
-        console.log(`  Player chooses ${playerSelection}`);
-        
+
+        // get player choice
+        playerSelection = getPlayerChoice(SELECTIONS);
+
+        // get comp choice
+        computerSelection = getComputerChoice(SELECTIONS);
+
         // display round results and increment scores accordingly
-        let playerWin = calcRoundResults(computerSelection, playerSelection);
+        playerWin = playRound(computerSelection, playerSelection);
+
         if (playerWin) {
             playerScore += 1;
             console.log("  You win!")
         } else if (playerWin == false) {
-            compScore += 1;
+            computerScore += 1;
             console.log("  You lose!")
         } else {
             console.log("  Draw!");
@@ -36,79 +39,54 @@ let playerScore = 0;
     }
 
     // display game results
-    console.log(`Score: ${playerScore} to ${compScore}`)
-
-    if (playerScore > compScore) {
-        console.log("Winner!!!");
-    } else if (playerScore < computerScore) {
-        console.log("Loser!!!");
-    } else {
-        console.log("What are the odds?!?!? Draw!!!");
-    }
+    displayGameResults(playerScore, computerScore);
+}
 
 /**
  * Function that randomly generates computer player choice
  */
-function getComputerChoice () {
-    let numRand = Math.floor(Math.random() * 3) + 1;
-    
-    let computerChoice;
-    if (numRand === 1) {
-        return computerChoice = ROCK;
-    } else if (numRand === 2) {
-        return computerChoice = PAPER;
-    } else {
-        return computerChoice = SCISSORS;
-    }    
+function getComputerChoice (SELECTIONS) {
+    return SELECTIONS[Math.floor(Math.random() * 3)]; 
 }
 
 /**
  * Function to ask user their choice
  */
-function getPlayerChoice () {
+function getPlayerChoice (SELECTIONS) {
     while (true) {
         // ask user for input
         let input = prompt("Enter your selection: Rock, Paper, or Scissors");
         let playerChoice = formatStr(input);
 
         // validate input
-        if (playerChoice === ROCK || playerChoice === PAPER || playerChoice === SCISSORS) {
-            return playerChoice;
-        } else {
-            alert("Invalid entry.  Please try again.");
+        for (let i = 0; i < SELECTIONS.length; i++) {
+            if (playerChoice === SELECTIONS[i]) {
+                return playerChoice;
+            }
         }
+
+        alert("Invalid entry. Please try again.");
     }
 }
 
 /**
  * Function to determine results of round
  */
-function calcRoundResults (computerSelection, playerSelection) {
-        if (playerSelection === computerSelection) {
-            return;
-        } else if (playerSelection === ROCK && computerSelection === SCISSORS) {
-            return true;
-        } else if (playerSelection === PAPER && computerSelection === ROCK) {
-            return true;
-        } else if (playerSelection === SCISSORS && computerSelection === PAPER) {
-            return true;
-        } else {
-            return false;
-        }
-}
+function playRound (computerSelection, playerSelection) {
+    console.log(`  Player chooses ${playerSelection}`);
+    console.log(`  Computer chooses ${computerSelection}`);
 
-/**
- * Function to play one round of game
- */
-function playRound () {
-
-}
-
-/**
- * Function to play game
- */
-function game () {
-
+    if (playerSelection === computerSelection) {
+        return;
+    } else if (playerSelection === "Rock" && computerSelection === "Scissors") {
+        return true;
+    } else if (playerSelection === "Paper" && computerSelection === "Rock") {
+        return true;
+    } else if (playerSelection === "Scissors" && computerSelection === "Paper") {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 /**
@@ -120,4 +98,19 @@ function formatStr(str) {
     let strNew = strBeg.concat(strEnd);
 
     return strNew;
+}
+
+/**
+ * Function to display game results
+ */
+function displayGameResults(playerScore, computerScore) {
+    console.log(`Score: ${playerScore} to ${computerScore}`)
+
+    if (playerScore > computerScore) {
+        console.log("Winner!!!");
+    } else if (playerScore < computerScore) {
+        console.log("Loser!!!");
+    } else {
+        console.log("What are the odds?!?!? Draw!!!");
+    }
 }

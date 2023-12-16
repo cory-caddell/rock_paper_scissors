@@ -1,41 +1,39 @@
 /* Program to play the age old classic, Rock, Paper, Scissors against computer */
 
-game();
+let playerSelection;
+const buttons = document.querySelectorAll('button');
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        playerSelection = button.textContent;
+        game(playerSelection);
+    });
+});
 
 /**
  * Function to play game of Rock, Paper, Scissors
  */
-function game () {
+function game (playerSelection) {
     const SELECTIONS = ["Rock", "Paper", "Scissors"];
-    const ROUNDS = 5;
+    const WINNING_SCORE = 5;
     let computerScore = 0;
     let playerScore = 0;
     let computerSelection;
-    let playerSelection;
     let playerWin;
 
-    // play round of game
-    for (let i = 0; i < ROUNDS; i++ ) {
-        console.log(`Round ${i + 1} Go!: `);
+    // get comp choice
+    computerSelection = getComputerChoice(SELECTIONS);
 
-        // get player choice
-        playerSelection = getPlayerChoice(SELECTIONS);
+    // display round results and increment scores accordingly
+    playerWin = playRound(computerSelection, playerSelection);
 
-        // get comp choice
-        computerSelection = getComputerChoice(SELECTIONS);
-
-        // display round results and increment scores accordingly
-        playerWin = playRound(computerSelection, playerSelection);
-
-        if (playerWin) {
-            playerScore += 1;
-            console.log("  You win!")
-        } else if (playerWin == false) {
-            computerScore += 1;
-            console.log("  You lose!")
-        } else {
-            console.log("  Draw!");
-        }
+    if (playerWin) {
+        playerScore += 1;
+        console.log("  You win!")
+    } else if (playerWin == false) {
+        computerScore += 1;
+        console.log("  You lose!")
+    } else {
+        console.log("  Draw!");
     }
 
     // display game results
@@ -49,25 +47,6 @@ function getComputerChoice (SELECTIONS) {
     return SELECTIONS[Math.floor(Math.random() * 3)]; 
 }
 
-/**
- * Function to ask user their choice
- */
-function getPlayerChoice (SELECTIONS) {
-    while (true) {
-        // ask user for input
-        let input = prompt("Enter your selection: Rock, Paper, or Scissors");
-        let playerChoice = formatStr(input);
-
-        // validate input
-        for (let i = 0; i < SELECTIONS.length; i++) {
-            if (playerChoice === SELECTIONS[i]) {
-                return playerChoice;
-            }
-        }
-
-        alert("Invalid entry. Please try again.");
-    }
-}
 
 /**
  * Function to determine results of round
@@ -87,17 +66,6 @@ function playRound (computerSelection, playerSelection) {
     } else {
         return false;
     }
-}
-
-/**
- * Function to format selection
- */
-function formatStr(str) {
-    let strBeg = str.charAt(0).toUpperCase();
-    let strEnd = str.slice(1).toLowerCase();
-    let strNew = strBeg.concat(strEnd);
-
-    return strNew;
 }
 
 /**

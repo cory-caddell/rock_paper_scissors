@@ -1,11 +1,12 @@
-/* Program to play the age old classic, Rock, Paper, Scissors against computer */
+/* Program to play the age old classic, Rock, Paper, Scissors, against computer */
 
-let playerSelection;
+/**
+ * Start game once player makes a selection
+ */
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        playerSelection = button.textContent;
-        game(playerSelection);
+        game(button.textContent);
     });
 });
 
@@ -23,21 +24,18 @@ function game (playerSelection) {
     // get comp choice
     computerSelection = getComputerChoice(SELECTIONS);
 
-    // display round results and increment scores accordingly
+    // increment scores accordingly
     playerWin = playRound(computerSelection, playerSelection);
 
     if (playerWin) {
         playerScore += 1;
-        console.log("  You win!")
     } else if (playerWin == false) {
         computerScore += 1;
-        console.log("  You lose!")
     } else {
-        console.log("  Draw!");
     }
 
     // display game results
-    displayGameResults(playerScore, computerScore);
+    displayGameResults(playerScore, computerScore, computerSelection, playerSelection);
 }
 
 /**
@@ -52,8 +50,6 @@ function getComputerChoice (SELECTIONS) {
  * Function to determine results of round
  */
 function playRound (computerSelection, playerSelection) {
-    console.log(`  Player chooses ${playerSelection}`);
-    console.log(`  Computer chooses ${computerSelection}`);
 
     if (playerSelection === computerSelection) {
         return;
@@ -71,14 +67,14 @@ function playRound (computerSelection, playerSelection) {
 /**
  * Function to display game results
  */
-function displayGameResults(playerScore, computerScore) {
-    console.log(`Score: ${playerScore} to ${computerScore}`)
-
-    if (playerScore > computerScore) {
-        console.log("Winner!!!");
-    } else if (playerScore < computerScore) {
-        console.log("Loser!!!");
-    } else {
-        console.log("What are the odds?!?!? Draw!!!");
-    }
+function displayGameResults(playerScore, computerScore, computerSelection, playerSelection, WINNING_SCORE) {
+    
+    const results = document.querySelector('#results');
+    results.classList.add('result');
+    
+    results.textContent = `Player chooses ${playerSelection}`
+        + `\nComputer chooses ${computerSelection}`
+        + `\nScore: ${playerScore} to ${computerScore}`
+        + (playerScore > WINNING_SCORE) ? '\nWinner!' :
+            (computerScore > WINNING_SCORE) ? '\nLoser!' : '';
 }

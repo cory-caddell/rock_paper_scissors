@@ -1,50 +1,71 @@
 /* Program to play the age old classic, Rock, Paper, Scissors, against computer */
 
-/**
- * Start game once player makes a selection
- */
-const buttons = document.querySelectorAll('button');
-buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-        game(button.textContent);
-    });
-});
+game();
+
 
 /**
  * Function to play game of Rock, Paper, Scissors
  */
-function game (playerSelection) {
+function game () {
     const SELECTIONS = ["Rock", "Paper", "Scissors"];
     const WINNING_SCORE = 5;
     let computerScore = 0;
     let playerScore = 0;
+    let playerSelection;
     let computerSelection;
     let playerWin;
+    
+    const results = document.querySelector('#results');
+    results.classList.add('result');
+    
+    // play a round
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach((button) => {
+        button.addEventListener('click', () => {
+            
+            //get player choice
+            playerSelection = button.textContent;
 
-    // get comp choice
-    computerSelection = getComputerChoice(SELECTIONS);
+            //get computer choice
+            computerSelection = SELECTIONS[Math.floor(Math.random() * SELECTIONS.length)];      
+            
+            //determine winner of round
+            playerWin = playRound(computerSelection, playerSelection);
 
-    // increment scores accordingly
-    playerWin = playRound(computerSelection, playerSelection);
+            // increment scores accordingly
+            if (playerWin) {
+                playerScore += 1;
+            } else if (playerWin == false) {
+                computerScore += 1;
+            } else {
+                //draw
+            }
 
-    if (playerWin) {
-        playerScore += 1;
-    } else if (playerWin == false) {
-        computerScore += 1;
-    } else {
-    }
+            // display round results
+            const results = document.querySelector('#results');
+            results.classList.add('result');
+    
+            results.textContent = `Player chooses ${playerSelection}`
+                + `\nComputer chooses ${computerSelection}`
+                + `\nScore: ${playerScore} to ${computerScore}`;
 
-    // display game results
-    displayGameResults(playerScore, computerScore, computerSelection, playerSelection);
+            // display game winner. reset score.
+            if (playerScore == WINNING_SCORE) {
+                results.textContent += '\nPlayer is Winner!';
+                playerScore = 0;
+                computerScore = 0;
+            }
+
+            if (computerScore == WINNING_SCORE) {
+                results.textContent += '\nPlayer is Loser!';
+                playerScore = 0;
+                computerScore = 0;
+            }
+
+        });
+    });
+
 }
-
-/**
- * Function that randomly generates computer player choice
- */
-function getComputerChoice (SELECTIONS) {
-    return SELECTIONS[Math.floor(Math.random() * 3)]; 
-}
-
 
 /**
  * Function to determine results of round
@@ -62,19 +83,4 @@ function playRound (computerSelection, playerSelection) {
     } else {
         return false;
     }
-}
-
-/**
- * Function to display game results
- */
-function displayGameResults(playerScore, computerScore, computerSelection, playerSelection, WINNING_SCORE) {
-    
-    const results = document.querySelector('#results');
-    results.classList.add('result');
-    
-    results.textContent = `Player chooses ${playerSelection}`
-        + `\nComputer chooses ${computerSelection}`
-        + `\nScore: ${playerScore} to ${computerScore}`
-        + (playerScore > WINNING_SCORE) ? '\nWinner!' :
-            (computerScore > WINNING_SCORE) ? '\nLoser!' : '';
 }
